@@ -1,0 +1,227 @@
+﻿Basics
+
+When we execute a script,an execution context is created in two phases:
+1) Memory creation phase:
+key-value pairs
+where memory is allocated to variables and functions
+with variables they are undefined in the first phase
+while functions are assigned their whole code.
+2) Code Executio phase:
+Line by line execution 
+variables are asssigned there values
+when functions are invoked a new execution context is created inside a global execution context
+
+Call Stack is used for managing execution contexts.
+
+Hoisting is JavaScript's default behavior of moving declarations to the top.
+The explanation is related to execution contexts.
+
+Window is a global object which is created along with global execution context and a this variable is aloso created.
+At global level this===window
+
+undefined is a placeholder/special keyword which is placed with variables to state that it is
+ike taken memory
+
+JS is a loosely/weakly typed language(data types)
+
+Scope in JS is directly related with lexical environment.
+
+E.g
+function a(){
+console.log(b);
+}
+var b=10;
+a();
+Output:
+10
+Explanation:
+
+Scope means where you can access a specific function or variable.
+
+Whenever an execution context is created a lexical environment is also created .
+Lexical environment is the local memory along with lexical environment of the parent.
+(Lexical means in a hierarchy or in a sequence)
+E.g
+function a(){
+
+function b(){
+
+}
+
+}
+b is lexically inside a(b is physically present inside a).
+a is lexically inside global
+Scope chain is nothing but a chain of lexical environments with parent references.
+
+Let and Const
+
+let and const are hoisted but different from var.
+They are in the temporal dead zone for the time being.
+Temporal dead zone is the time since the let variable is hoisted to the variable initialization.
+Whenever you try to access a variable i.e in temporal dead zone it will give you a reference error
+
+Before line no. 3 it is the temporal dead zone for a.
+
+E.g:
+console.log(‘haren sharma’);
+let a=10;
+let a=100;
+//redeclaration
+It will result in a syntax error and nothing will be shown,not even the console msg.
+
+Initialization is a must for const variable.
+
+Level of strictness:
+const>let>var
+
+Syntax error:redeclaration
+Type error:re-assignment of a const variable
+Reference error:trying to access variables that are in temporal dead zone.
+
+Temporal dead zone sometimes if not handled properly can lead to unexpected errors.To avoid go old school 
+
+let and const are block scoped.
+
+To group multiple statements into a single statement we use block i.e {}.
+Variables can be shadowed
+E.g:1
+var a=10;
+{
+    var a=100;
+    console.log(a);
+}
+console.log(a);
+Output:
+100
+100
+E.g:2
+const a=10;
+{
+    const a=100;
+    console.log(a);
+}
+console.log(a);
+Output:
+100
+10
+
+Note. var is function scoped
+
+Closures:
+
+Function along with it's lexical scope bundled together forms a closure.
+In simple words,a function along with it's outer environment forms a closure.
+
+In JavaScript, closures are created every time a function is created, at function creation time.
+
+Function when returned from another function maintains it's lexical scope
+
+Uses Of Closures:-
+-Module Design Pattern
+-Currying
+-Functions like once
+-memoize
+-maintaining state in asyunc world
+-setTimeouts
+-Iterators
+
+Higher Order Functions:
+A function which takes some function as an argument or returns some function is konown as a higher order function
+function x(){
+
+}
+function y(x){
+
+}
+x is callback function
+y is higher order function.
+
+Array Mathods:
+1)Map:it is used for the transformation of the array.
+2)Filter:is used to filter the elements in the array.For e.g
+if we want to find all the even elements in the array.
+The filter() method creates a new array filled with elements that pass a test provided by a function.
+3)Reduce:is used when we take all the values(iterate) of the array and reduce it to one element.
+For e.g finding sum,max,etc.The function takes 2 arguments acc(accumulator) and curr(current).
+First argument of reduce is the function and second argument of the reduce function is the initial value of acc.
+
+Prototype:
+A prototype is just a property that every function you create in JavaScript has, that points to an object
+
+Arrow fns:
+they cannot be constructor functions
+you cannot use new keyword
+hence they donot posses prototype property.
+
+Callbacks and higher order:
+Function passed as an argument is known as a callback
+Function taking a function as its argument is known as a higher order fn.
+Disadvantages:
+1)Callback hell-nested callbacks(pyramid)
+2)Inversion Control:When you pass your callback to a third party library you loose the control.
+E.g restaurant taking your phne no. to ping you whne a seat is availabel but they also uses your phno for marketing.
+
+Promises:
+The solution to the callback hell is promises.
+A promise is a 'promise of code execution'.
+The code either executes or fails,in both the cases,the subscriber will be notified.
+exists to make the complexity of making asynchronous requests more manageable
+It represents the status of an asynchronous request.
+It can be in one of the three states:
+1)pending
+2)fulfilled
+3)rejected
+syntax:
+let p1=new Promise((resolve,reject){
+    //code that we want to run in the background and after it gets executed
+    //we get notified with the help of resolve and reject
+});
+
+Callback is not always asynchronous.It depends upon the situation.
+
+Async Await:
+
+"async and await make promises easier to write"
+async makes a function return a Promise
+await makes a function wait for a Promise
+The await keyword can only be used inside an async function.
+The await keyword makes the function pause the execution and wait for a resolved promise before it continues:
+
+ this.getAll = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/users", {
+        method: "GET",
+      });
+      return res.json();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+    // this.delete = async (id) => {
+  //   try {
+  //     await fetch(`http://localhost:3000/users/${id}`, {
+  //       method: "DELETE",
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+    this.put = async (obj, id) => {
+    try {
+      const res = await fetch(`http://localhost:3000/users/${id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(obj),
+      });
+      return res.json();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
